@@ -138,6 +138,25 @@ class URDFViewer extends HTMLElement {
         plane.scale.set(10, 10, 10);
         scene.add(plane);
 
+        const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 5); // Sky color, ground color, intensity
+        scene.add(hemiLight);
+
+        // pointLight = new THREE.PointLight(0xffffff, 1, 100);  // color, intensity, distance
+        // pointLight.position.set(0.5, 0.5, 0.5);  // x, y, z position
+        // scene.add(pointLight);
+        // pointLight = new THREE.PointLight(0xffffff, 1, 100);  // color, intensity, distance
+        // pointLight.position.set(-0.5, 0.5, 0.5);  // x, y, z position
+        // scene.add(pointLight);
+        // pointLight = new THREE.PointLight(0xffffff, 1, 100);  // color, intensity, distance
+        // pointLight.position.set(0.5, -0.5, 0.5);  // x, y, z position
+        // scene.add(pointLight);
+        // pointLight = new THREE.PointLight(0xffffff, 1, 100);  // color, intensity, distance
+        // pointLight.position.set(0.5, 0.5, -0.5);  // x, y, z position
+        // scene.add(pointLight);
+        // pointLight = new THREE.PointLight(0xffffff, 1, 100);  // color, intensity, distance
+        // pointLight.position.set(-0.5, -0.5, 0.5);  // x, y, z position
+        //scene.add(pointLight);
+
         // Controls setup
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.rotateSpeed = 2.0;
@@ -362,7 +381,7 @@ class URDFViewer extends HTMLElement {
         this.plane.position.y = bbox.min.y - 1e-3;
 
         const dirLight = this.directionalLight;
-        dirLight.castShadow = this.displayShadow;
+        dirLight.castShadow = false;
 
         if (this.displayShadow) {
 

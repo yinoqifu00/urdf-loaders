@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import { registerDragEvents } from './dragAndDrop.js';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
@@ -241,6 +242,8 @@ document.addEventListener('WebComponentsReady', () => {
     viewer.loadMeshFunc = (path, manager, done) => {
 
         const ext = path.split(/\./g).pop().toLowerCase();
+        const mtl_path = path.replace(/\.\w+$/, '.mtl');
+
         switch (ext) {
 
             case 'gltf':
@@ -253,12 +256,26 @@ document.addEventListener('WebComponentsReady', () => {
                 );
                 break;
             case 'obj':
-                new OBJLoader(manager).load(
-                    path,
-                    result => done(result),
+                new MTLLoader(manager).load(
+                    mtl_path,
+                    materials => {
+                        materials.preload();
+                        new OBJLoader(manager).setMaterials(materials).load(
+                            path,
+                            result => done(result),
+                            null,
+                            err => done(null, err),
+                        );
+                    },
                     null,
                     err => done(null, err),
                 );
+                // new OBJLoader(manager).load(
+                //     path,
+                //     result => done(result),
+                //     null,
+                //     err => done(null, err),
+                // );
                 break;
             case 'dae':
                 new ColladaLoader(manager).load(
